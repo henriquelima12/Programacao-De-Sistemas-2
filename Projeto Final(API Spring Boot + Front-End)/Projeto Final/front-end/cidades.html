@@ -1,0 +1,149 @@
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<script type="text/javascript" src="js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="js/api.js"></script>
+		<script type="text/javascript" src="js/script.js"></script>
+		<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+		<title>Cidades</title>
+	</head>
+	<body onload="mostrarCidades()">
+		<nav class="navbar navbar-expand-lg navbar-light bg-light">
+			<div class="container-fluid">
+				<div class="collapse navbar-collapse" id="navbarSupportedContent">
+					<ul class="navbar-nav me-auto mb-2 mb-lg-0">
+					    <li class="nav-item">
+					        <a class="nav-link" aria-current="page" href="index.html">Início</a>
+					    </li>
+					    <li class="nav-item">
+					        <a class="nav-link active" href="cidades.html">Cidades</a>
+					    </li>
+					    <li class="nav-item">
+					        <a class="nav-link" href="jogos.html">Jogos</a>
+					    </li>
+					</ul>
+					<form class="d-flex navbar-nav">
+					    <input class="form-control me-2" type="search" placeholder="Pesquise por nome" aria-label="Search" id="pesquisaCidade">
+					    <button class="btn btn-outline-success" type="button" onclick="obterCidadesByNome()" data-bs-toggle="modal" data-bs-target="#findNomeModal">Pesquisar</button>
+					</form>
+				</div>
+			</div>
+		</nav>
+
+		<div class="container">
+			<article>
+				<h3>Lista de Cidades</h3>
+				<table class="table table-striped table-hover text-center">
+					<thead>
+					    <tr>
+						    <th scope="col">Id</th>
+						    <th scope="col">Nome</th>
+						    <th scope="col">Opções</th>
+					    </tr>
+					</thead>
+					<tbody id="cidades">    
+					</tbody>
+				</table>
+
+				<button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addCidadeModal">
+				  	Adicionar Cidade
+				</button>
+			</article>
+		</div>
+	</body>
+
+	<!--modal add cidade-->
+	<div class="modal fade " id="addCidadeModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		  <div class="modal-dialog modal-lg">
+		    <div class="modal-content">
+			    <div class="modal-header">
+			        <h5 class="modal-title" id="exampleModalLabel">Adicionar Nova Cidade</h5>
+			        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			    </div>
+			    <div class="modal-body">
+			        <form>
+						<div class="mb-3">
+							<label for="nome" class="form-label">Nome</label>
+							<input type="text" id="nome" class="form-control">
+						</div>
+						<div class="mb-3">
+							<label for="estado" class="form-label">Estado</label>
+							<input type="text" id="estado" class="form-control">
+						</div>
+						<div class="mb-3">
+							<label for="pais" class="form-label">País</label>
+							<input type="text" id="pais" class="form-control">
+						</div>
+						<div class="mb-3">
+							<label for="nome" class="form-label">População</label>
+							<input type="text" id="populacao" class="form-control">
+						</div>
+					</form>	
+			    </div>
+			    <div class="modal-footer">
+			        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Voltar</button>
+			        <button type="button" class="btn btn-primary" onclick="adicionarCidade()">Salvar</button>
+			    </div>
+		    </div>
+		</div>
+	</div>
+
+	<!--modal edit cidade-->
+	<div class="modal fade " id="editCidadeModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-lg">
+		    <div class="modal-content">
+			    <div class="modal-header">
+			        <h5 class="modal-title" id="exampleModalLabel">Editar Cidade</h5>
+			        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			    </div>
+			    <div class="modal-body">
+			        <form>
+						<div class="mb-3">
+							<label for="idCidade" class="form-label">Id</label>
+							<input type="text" id="idCidade" class="form-control" disabled>
+						</div>			
+						<div class="mb-3">
+							<label for="nomeUpdate" class="form-label">Nome</label>
+							<input type="text" id="nomeUpdate" class="form-control">
+						</div>
+						<div class="mb-3">
+							<label for="estadoUpdate" class="form-label">Estado</label>
+							<input type="text" id="estadoUpdate" class="form-control">
+						</div>
+						<div class="mb-3">
+							<label for="paisUpdate" class="form-label">País</label>
+							<input type="text" id="paisUpdate" class="form-control">
+						</div>
+						<div class="mb-3">
+							<label for="populacaoUpdate" class="form-label">População</label>
+							<input type="text" id="populacaoUpdate" class="form-control">
+						</div>
+					</form>
+			    </div>
+			    <div class="modal-footer">
+			        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Voltar</button>
+			        <button type="button" class="btn btn-primary" onclick="atualizarCidade()">Atualizar</button>
+			    </div>
+		    </div>
+		</div>
+	</div>
+
+	<!--modal listar cidades-->
+	<div class="modal fade " id="findNomeModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog  modal-xl">
+		    <div class="modal-content">
+			    <div class="modal-header">
+			        <h5 class="modal-title" id="exampleModalLabel">Resultados para a pesquisa</h5>
+			        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			    </div>
+			    <div class="modal-body" id="buscaCidades">
+			        
+			    </div>
+			    <div class="modal-footer">
+			        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Voltar</button>
+			    </div>
+		    </div>
+		</div>
+	</div>
+</html>
